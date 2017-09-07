@@ -21,7 +21,7 @@ from functools import reduce
 # Translation configuration
 I18N_DIR = '%s/i18n/' % os.path.dirname(os.path.realpath(__file__))
 I18N_DOMAIN = 'sentinel'
-I18N_DEFAULT = 'en_US'
+I18N_DEFAULT = 'en'
 
 
 # _ will be initialized by gettext.install but declared to prevent pep8 issues
