@@ -1,0 +1,7 @@
+services: docker
+
+script:
+  - docker build . -t odoo-stock-scanner-sentinel
+
+after_success:
+  - ./publish.sh

@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/camptocamp/docker-odoo-stock-scanner-sentinel.svg?branch=master)](https://travis-ci.org/camptocamp/docker-odoo-stock-scanner-sentinel)
+
 # Docker Image for Odoo Stock Scanner Sentinel
 
 This image is meant to be used with the Odoo addon: `stock_scanner` in the OCA repository https://github.com/OCA/stock-logistics-barcode.
