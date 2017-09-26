@@ -1,6 +1,0 @@
-[openerp]
-host = 10.42.0.1
-port = 8069
-database = odoodb
-user = whoperator
-password = test

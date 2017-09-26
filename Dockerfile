@@ -15,13 +15,14 @@ RUN apt-get update && \
     mkdir /var/run/sshd
 
 COPY ./hardware/ /opt/odoo/hardware
-COPY ./shell.sh  /opt/odoo
-RUN adduser --home /home/scanneroperator --disabled-login --gecos "" --shell /opt/odoo/shell.sh scanneroperator
+COPY ./shell.sh /opt/odoo
+RUN adduser --home /home/scanneroperator --disabled-login --gecos "" --shell /opt/odoo/shell.sh scanneroperator \
+    && mkdir /home/scanneroperator/.ssh \
+    && chown -R scanneroperator: /home/scanneroperator/.ssh
 
-COPY .odoo_sentinelrc /home/scanneroperator
-COPY authorized_keys /home/scanneroperator/.ssh/
-RUN chown -R scanneroperator:scanneroperator /home/scanneroperator/.ssh && \
-    chmod 640 /home/scanneroperator/.ssh/authorized_keys
+COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 EXPOSE 22
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["/usr/sbin/sshd", "-D"]

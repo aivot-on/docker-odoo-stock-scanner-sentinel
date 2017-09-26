@@ -1,0 +1,16 @@
+version: '2'
+
+services:
+  scannersentinel:
+    build: .
+    ports:
+      - "2222:22"
+    environment:
+      SCANNER_USER: whoperator
+      SCANNER_PASSWORD: test
+      SCANNER_DB: odoodb
+      SCANNER_HOST: 172.24.0.1
+      SCANNER_PORT: 8069
+      SCANNER_SSH_AUTHORIZED_KEYS: |-
+        ssh-rsa AAAAxxxxxxxw== scanneroperator
+        ssh-rsa AAAAyyyyyyyw== scanneroperator2
