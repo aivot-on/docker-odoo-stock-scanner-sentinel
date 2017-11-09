@@ -18,7 +18,7 @@ RUN apt-get update && \
         && \
     apt-get clean && \
     rm -rf /va/lob/apt/lists/* && \
-    pip install "openobject-library<2" && \
+    pip install --index-url=https://pypi.python.org/simple/ --trusted-host pypi.python.org openobject-library && \
     cd /opt/odoo/hardware/i18n/ && \
     ./translate.sh compile fr && \
     ./translate.sh compile en && \
