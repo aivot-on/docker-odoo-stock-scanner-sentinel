@@ -5,13 +5,16 @@ echo "${SCANNER_SSH_AUTHORIZED_KEYS}" > /home/scanneroperator/.ssh/authorized_ke
 chown -R scanneroperator: /home/scanneroperator/.ssh
 chmod 640 /home/scanneroperator/.ssh/authorized_keys
 
-cat <<EOF > /home/scanneroperator/.odoo_sentinelrc
-[openerp]
+cat <<EOF > /home/scanneroperator/.odoorpcrc
+[sentinel]
+type = ODOO
+protocol = jsonrpc
+timeout = ${SCANNER_TIMEOUT:-120.0}
 host = ${SCANNER_HOST}
 port = ${SCANNER_PORT:-8069}
 database = ${SCANNER_DB}
 user = ${SCANNER_USER}
-password = ${SCANNER_PASSWORD}
+passwd = ${SCANNER_PASSWORD}
 EOF
 
 exec "$@"

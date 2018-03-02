@@ -36,6 +36,7 @@ All the environment variables below are required but the port which has a defaul
 | `SCANNER_DB`                  | Name of Odoo database                                                             |
 | `SCANNER_USER`                | Odoo user used by the sentinel                                                    |
 | `SCANNER_PASSWORD`            | Password for the user                                                             |
+| `SCANNER_TIMEOUT`             | Timeout                                                             |
 
 The container publishes the stock scanner sentinel over SSH with the user
 `scanneroperator`, on the port 22.
