@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -eu
 
 echo "${SCANNER_SSH_AUTHORIZED_KEYS}" > /home/scanneroperator/.ssh/authorized_keys
 chown -R scanneroperator: /home/scanneroperator/.ssh
@@ -16,5 +16,9 @@ database = ${SCANNER_DB}
 user = ${SCANNER_USER}
 passwd = ${SCANNER_PASSWORD}
 EOF
+
+LOGFILE=/home/scanneroperator/sentinel.log
+( umask 0 && truncate -s0 $LOGFILE )
+tail --pid $$ -n0 -F $LOGFILE &
 
 exec "$@"
