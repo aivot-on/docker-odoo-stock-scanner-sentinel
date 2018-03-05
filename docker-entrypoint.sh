@@ -21,4 +21,17 @@ LOGFILE=/home/scanneroperator/sentinel.log
 ( umask 0 && truncate -s0 $LOGFILE )
 tail --pid $$ -n0 -F $LOGFILE &
 
-exec "$@"
+# https://github.com/docker-library/mysql/issues/47#issuecomment-147397851
+asyncRun() {
+    "$@" &
+    pid="$!"
+    trap 'echo ''Stopping PID $pid''; kill -SIGTERM $pid' SIGINT SIGTERM
+
+    # A signal emitted while waiting will make the wait command return code > 128
+    # Let's wrap it in a loop that doesn't end before the process is indeed stopped
+    while kill -0 $pid > /dev/null 2>&1; do
+        wait
+    done
+}
+
+asyncRun exec "$@"
