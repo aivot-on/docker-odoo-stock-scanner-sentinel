@@ -17,7 +17,9 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
   echo "Pushing image to docker hub ${DOCKER_HUB_REPO}:${tag}"
   docker tag odoo-stock-scanner-sentinel "camptocamp/odoo-stock-scanner-sentinel:9.0-${tag}"
   docker tag odoo-stock-scanner-sentinel "camptocamp/odoo-stock-scanner-sentinel:10.0-${tag}"
+  docker tag odoo-stock-scanner-sentinel "camptocamp/odoo-stock-scanner-sentinel:11.0-${tag}"
   docker push "camptocamp/odoo-stock-scanner-sentinel:9.0-${tag}"
   docker push "camptocamp/odoo-stock-scanner-sentinel:10.0-${tag}"
+  docker push "camptocamp/odoo-stock-scanner-sentinel:11.0-${tag}"
 
 fi

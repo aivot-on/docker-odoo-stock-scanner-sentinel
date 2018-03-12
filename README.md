@@ -10,18 +10,25 @@ The image is published on the official Docker registry in https://hub.docker.com
 
 Latest:
 ```
+docker pull camptocamp/odoo-stock-scanner-sentinel:11.0-latest
 docker pull camptocamp/odoo-stock-scanner-sentinel:10.0-latest
 docker pull camptocamp/odoo-stock-scanner-sentinel:9.0-latest
 ```
 
-Versioned, for version 9.0 or 10.0 of Odoo:
+Versioned, for version 9.0, 10.0 or 11.0 of Odoo:
 ```
-docker pull camptocamp/odoo-stock-scanner-sentinel:10.0-x
-docker pull camptocamp/odoo-stock-scanner-sentinel:9.0-x
+docker pull camptocamp/odoo-stock-scanner-sentinel:11.0-x-y
+docker pull camptocamp/odoo-stock-scanner-sentinel:10.0-x-y
+docker pull camptocamp/odoo-stock-scanner-sentinel:9.0-x-y
 ```
-Where `x` is an increment of the image version, corresponding to the GitHub tag.
+Where `x` is the version of the
+[odoo-sentinel](https://pypi.python.org/pypi/odoo-sentinel) library, `y` is an
+increment starting from 1 and incremented when the image is rebuilt for the
+same library version, `x-y` corresponds to a GitHub tag on the project.
 
 List of images: https://hub.docker.com/r/camptocamp/odoo-stock-scanner-sentinel/tags/
+
+At this point, the images for 9.0, 10.0 and 11.0 are the same.
 
 
 ## Configuration
@@ -74,3 +81,17 @@ ssh -p 2222 scanneroperator@localhost
 ```
 
 You should see the ncurses client.
+
+## Release new image
+
+To release an updated image:
+
+* If the `odoo-sentinel` library has a new version, change the version in
+  `requirements.txt` and add a tag `x-1` (for instance 1.1-1 if the new
+  `odoo-sentinel` version is 1.1)
+* If you need a new build and the `odoo-sentinel` version did not change, add
+  a tag by incrementing the last digit of the last release (for instance
+  (`1.0-2` if the previous one was `1.0-1`)
+
+When the tag is pushed, Travis will build the new image and push it on
+https://hub.docker.com/r/camptocamp/odoo-stock-scanner-sentinel/
