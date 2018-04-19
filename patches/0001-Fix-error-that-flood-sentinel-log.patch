@@ -1,0 +1,46 @@
+From adb0cb6e541a5d09a2081babdef697b7a2435907 Mon Sep 17 00:00:00 2001
+From: nbessi <nicolas.bessi@camptocamp.com>
+Date: Thu, 1 Mar 2018 16:38:48 +0100
+Subject: [PATCH] Fix error that flood sentinel log
+
+and may crash the sentinel.
+
+When there are network latencies the following error floods the sentinel log:
+
+```
+Traceback (most recent call last):
+File "/opt/odoo/hardware/sentinel.py", line 466, in main_loop
+scroll=True, title=title)
+File "/opt/odoo/hardware/sentinel.py", line 331, in _display
+key = self.getkey()
+File "/opt/odoo/hardware/sentinel.py", line 238, in getkey
+key = self.screen.getkey()
+error: no input
+```
+
+The getkey is in a loop that is waiting for a keyboard input. If there
+is no keyboard input the error is raised. This flood the log with
+hundred of entries.
+---
+ odoo_sentinel/__init__.py | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/odoo_sentinel/__init__.py b/odoo_sentinel/__init__.py
+index 8c544f5..25b94b8 100755
+--- a/odoo_sentinel/__init__.py
++++ b/odoo_sentinel/__init__.py
+@@ -191,7 +191,10 @@ class Sentinel(object):
+             key = self._read_from_file()
+         else:
+             # Get the pushed character
+-            key = self.screen.getkey()
++            try:
++                key = self.screen.getkey()
++            except Exception:
++                key = None
+         if key == '':
+             # Escape key : Return back to the previous step
+             raise SentinelBackException('Back')
+-- 
+2.7.4
+
