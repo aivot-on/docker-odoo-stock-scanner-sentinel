@@ -1,0 +1,63 @@
+From 6ceccedd86d566821f8d4baa8ca534acacf454be Mon Sep 17 00:00:00 2001
+From: Guewen Baconnier <guewen.baconnier@camptocamp.com>
+Date: Thu, 19 Apr 2018 09:16:15 +0200
+Subject: [PATCH] Encode text to the system's preferred encoding
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Non-ascii chars are currently badly interpreted (in my case, the word
+"Réception" was output as "Reption").
+
+This is what is described in the curses documentation:
+https://docs.python.org/3.5/library/curses.html
+---
+ odoo_sentinel/__init__.py | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/odoo_sentinel/__init__.py b/odoo_sentinel/__init__.py
+index e1afedd..9139a39 100755
+--- a/odoo_sentinel/__init__.py
++++ b/odoo_sentinel/__init__.py
+@@ -6,6 +6,7 @@ import argparse
+ import curses.ascii
+ import gettext
+ import math
++import locale
+ import odoorpc
+ import os
+ import sys
+@@ -15,6 +16,9 @@ import traceback
+ from datetime import datetime
+ from functools import reduce
+ 
++locale.setlocale(locale.LC_ALL, '')
++encoding = locale.getpreferredencoding()
++
+ # Translation configuration
+ I18N_DIR = '%s/i18n/' % os.path.dirname(os.path.realpath(__file__))
+ I18N_DOMAIN = 'sentinel'
+@@ -257,7 +261,7 @@ class Sentinel(object):
+ 
+         # Display the text
+         if not scroll:
+-            self.screen.addstr(y, x, text, color)
++            self.screen.addstr(y, x, text.encode(encoding), color)
+         else:
+             # Wrap the text to avoid splitting words
+             text_lines = []
+@@ -277,9 +281,9 @@ class Sentinel(object):
+                 # Display the menu
+                 self.screen.addstr(height - 1, x,
+                                    (self.window_width - x - 1) * ' ', color)
++                text = text_lines[first_line:first_line + height - y]
+                 self.screen.addstr(
+-                    y, x, '\n'.join(
+-                        text_lines[first_line:first_line + height - y]),
++                    y, x, '\n'.join(text).encode(encoding),
+                     color)
+ 
+                 # Display arrows
+-- 
+2.7.4
+
