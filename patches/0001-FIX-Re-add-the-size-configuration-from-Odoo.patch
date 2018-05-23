@@ -1,0 +1,78 @@
+From bfab6c934a07d80afacb5d659eea30b092051119 Mon Sep 17 00:00:00 2001
+From: Sylvain GARANCHER <sylvain.garancher@syleam.fr>
+Date: Sat, 23 Dec 2017 22:26:32 +0100
+Subject: [PATCH] [FIX] Re-add the size configuration from Odoo
+
+Some terminals anounce a wrong size, because they have a fixed-size
+virtual screen. This commit allows to force the window size on such
+terminals.
+---
+ odoo_sentinel/__init__.py | 31 ++++++++++++++++++++++++++++++-
+ 1 file changed, 30 insertions(+), 1 deletion(-)
+
+diff --git a/odoo_sentinel/__init__.py b/odoo_sentinel/__init__.py
+index 8c544f5..1eb229a 100755
+--- a/odoo_sentinel/__init__.py
++++ b/odoo_sentinel/__init__.py
+@@ -88,6 +88,11 @@ class Sentinel(object):
+ 
+         # Initialize window
+         self.screen = stdscr
++        self.auto_resize = False
++        self.window_width = 18
++        self.window_height = 6
++        # Store the initial screen size before resizing it
++        initial_screen_size = self.screen.getmaxyx()
+         self._set_screen_size()
+ 
+         self._init_colors()
+@@ -106,6 +111,7 @@ class Sentinel(object):
+             self.scanner_check()
+ 
+         # Reinit colors with values configured in OpenERP
++        self._resize(initial_screen_size)
+         self._reinit_colors()
+ 
+         # Initialize mouse events capture
+@@ -126,6 +132,23 @@ class Sentinel(object):
+         if isinstance(self.scenario_id, list):
+             self.scenario_id, self.scenario_name = self.scenario_id
+ 
++    def _resize(self, initial_screen_size):
++        """
++        Resizes the window
++        """
++        # Asks for the hardware screen size
++        (
++            self.window_width,
++            self.window_height,
++        ) = self.oerp_call('screen_size')[1]
++        if not self.window_width or not self.window_height:
++            self.auto_resize = True
++            # Restore the initial size to allow detecting the real size
++            (self.window_height, self.window_width) = initial_screen_size
++            self.screen.resize(self.window_height, self.window_width)
++
++        self._set_screen_size()
++
+     def _init_colors(self):
+         """
+         Initialize curses colors
+@@ -150,7 +173,13 @@ class Sentinel(object):
+         self._init_colors()
+ 
+     def _set_screen_size(self):
+-        self.window_height, self.window_width = self.screen.getmaxyx()
++        # Get the dimensions of the hardware
++        if self.auto_resize:
++            (
++                self.window_height,
++                self.window_width,
++            ) = self.screen.getmaxyx()
++
+         self.screen.resize(self.window_height, self.window_width)
+ 
+     def _get_color(self, name):
+-- 
+2.7.4
+
