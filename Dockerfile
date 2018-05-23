@@ -28,12 +28,13 @@ RUN apt-get update && \
     mkdir /var/run/sshd && \
     echo -e 'LANG=C.UTF-8\nLC_ALL=C.UTF-8' > /etc/default/locale
 
-RUN adduser --home /home/scanneroperator --disabled-login --gecos "" --shell $(which odoo-sentinel) scanneroperator \
+RUN adduser --home /home/scanneroperator --disabled-login --gecos "" --shell /usr/bin/odoo-sentinel-shell.sh scanneroperator \
     && mkdir /home/scanneroperator/.ssh \
     && chown -R scanneroperator: /home/scanneroperator/.ssh \
     # ignore locale of the ssh client (LANG + LC_*)
     && sed -i '/AcceptEnv LANG LC_*/s/^/#/' /etc/ssh/sshd_config
 
+COPY odoo-sentinel-shell.sh /usr/bin/
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 EXPOSE 22
