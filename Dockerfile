@@ -21,6 +21,8 @@ RUN apt-get update && \
     patch /usr/local/lib/python3.5/dist-packages/odoosentinel/__init__.py /tmp/patches/0001-Encode-text-to-the-system-s-preferred-encoding.patch && \
     # https://github.com/OCA/odoo-sentinel/pull/9
     patch /usr/local/lib/python3.5/dist-packages/odoosentinel/__init__.py /tmp/patches/0001-Fix-error-that-flood-sentinel-log.patch && \
+    # https://github.com/OCA/odoo-sentinel/pull/3
+    patch /usr/local/lib/python3.5/dist-packages/odoosentinel/__init__.py /tmp/patches/0001-FIX-Re-add-the-size-configuration-from-Odoo.patch && \
     rm -rf /tmp/patches && \
     apt-get clean && \
     apt-get remove --purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false python3-pip python3-setuptools python3-wheel patch && \
