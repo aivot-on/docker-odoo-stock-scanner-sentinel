@@ -41,4 +41,7 @@ COPY docker-entrypoint.sh /docker-entrypoint.sh
 EXPOSE 22
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["/usr/sbin/sshd", "-D"]
+CMD ["/usr/sbin/sshd", "-D", "-e"]
+
+# You can activate more verbose logging with the command:
+# CMD ["/usr/sbin/sshd", "-D", "-e", "-o", "-o LogLevel=VERBOSE"]
