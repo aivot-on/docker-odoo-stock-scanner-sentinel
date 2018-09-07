@@ -38,6 +38,7 @@ All the environment variables below are required but the port which has a defaul
 | Environment variable          | Description                                                                       |
 |-------------------------------|-----------------------------------------------------------------------------------|
 | `SCANNER_SSH_AUTHORIZED_KEYS` | Multiline, content of the authorized_keys file used for the scanneroperator user. |
+| `SCANNER_PROTOCOL`            | Protocol to connect jsonrpc (default) or jsonrpc+ssl                              |
 | `SCANNER_HOST`                | Odoo Host                                                                         |
 | `SCANNER_PORT`                | Odoo Port, default: 8069                                                          |
 | `SCANNER_DB`                  | Name of Odoo database                                                             |

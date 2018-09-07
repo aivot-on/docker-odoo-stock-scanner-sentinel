@@ -8,7 +8,7 @@ chmod 640 /home/scanneroperator/.ssh/authorized_keys
 cat <<EOF > /home/scanneroperator/.odoorpcrc
 [sentinel]
 type = ODOO
-protocol = jsonrpc
+protocol = ${SCANNER_PROTOCOL:-jsonrpc}
 timeout = ${SCANNER_TIMEOUT:-120.0}
 host = ${SCANNER_HOST}
 port = ${SCANNER_PORT:-8069}
