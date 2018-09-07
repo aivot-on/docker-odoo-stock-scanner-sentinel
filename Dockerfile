@@ -14,6 +14,7 @@ RUN apt-get update && \
         python3-setuptools \
         python3-wheel \
         openssh-server \
+        ca-certificates \
         patch \
         && \
     pip3 install -r /requirements.txt && \
